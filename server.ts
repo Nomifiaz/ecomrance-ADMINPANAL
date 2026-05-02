@@ -33,25 +33,48 @@ app.use('/uploads', express.static('public/uploads'));
 
 // Mock Data
 let categories = [
-  { id: 1, name: "Clothes", isDeleted: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: 2, name: "Bed Sheets", isDeleted: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+  { id: 1, name: "Clothes", isDeleted: false, createdAt: "2025-09-17T09:10:16.000Z", updatedAt: "2025-09-17T09:10:16.000Z" },
+  { id: 2, name: "Bed Sheets", isDeleted: false, createdAt: "2025-09-17T09:24:12.000Z", updatedAt: "2025-09-17T09:24:12.000Z" }
 ];
 
 let products: any[] = [
   {
     id: 1,
     name: "Maria.B Pakistani Luxury Embroidered Lawn Suit",
-    description: "Fabric:Printed Lawn .Work: Embroidery and Printed .Includes: Kameez, Trouser and Dupatta.",
+    description: "Fabric:Printed Lawn .Work: Embroidery and Printed .Includes: Kameez, Trouser and Dupatta.Accessories: Tassels and hanging pearls will be provided same as the model picture.",
     price: 5679,
     stock: 34,
-    images: ["/uploads/images-1777651786226-537739729.png"],
+    images: ["/uploads/1758100603435-WhatsApp Image 2025-09-17 at 2.14.56 PM (1).jpeg"],
     categoryId: 1,
     discountType: "percentage",
     discountValue: 10,
     finalPrice: 5111.1,
     createdAt: "2025-09-17T09:16:43.000Z",
     updatedAt: "2025-09-17T09:16:43.000Z",
-    Category: { id: 1, name: "Clothes" },
+    Category: { id: 1, name: "Clothes", isDeleted: false },
+    averageRating: "0.0",
+    totalRatings: 0,
+    rating: 0,
+    rating_count: 0
+  },
+  {
+    id: 5,
+    name: "tesjjj",
+    description: "test",
+    price: 24000,
+    stock: 22,
+    images: ["/uploads/images-1777651786226-537739729.png"],
+    categoryId: 1,
+    discountType: "percentage",
+    discountValue: 14,
+    finalPrice: 20640,
+    createdAt: "2026-05-01T16:09:46.000Z",
+    updatedAt: "2026-05-01T18:24:29.000Z",
+    Category: { id: 1, name: "Clothes", isDeleted: false },
+    averageRating: "0.0",
+    totalRatings: 0,
+    rating: 0,
+    rating_count: 0
   }
 ];
 
@@ -64,17 +87,23 @@ let orders: any[] = [
     shippingAddress: "power market G10/4 islambad",
     city: "islamabad",
     phoneNumber: "03498282340",
-    orderDate: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    User: { id: 11, name: "fiaz", email: "numanfia1@gmail.com" },
+    orderDate: "2026-05-01T18:24:29.000Z",
+    createdAt: "2026-05-01T18:24:29.000Z",
+    updatedAt: "2026-05-01T18:24:29.000Z",
+    User: {
+      id: 11,
+      name: " fiaz",
+      email: "numanfia1@gmail.com"
+    },
     OrderItems: [
       {
         productName: "tesjjj",
         quantity: 1,
         price: "20640.00",
         total: "20640.00",
-        Product: { images: ["/uploads/images-1777651786226-537739729.png"] }
+        Product: {
+          images: ["/uploads/images-1777651786226-537739729.png"]
+        }
       }
     ]
   }
