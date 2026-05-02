@@ -28,7 +28,8 @@ export default function Products() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalState, setModalState] = useState<{ type: 'add' | 'edit' | 'view'; data?: any } | null>(null);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({
     name: '', description: '', price: '', stock: '', categoryId: '1', discountType: 'percentage', discountValue: '0',
   });
@@ -109,7 +110,12 @@ export default function Products() {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 text-slate-400" size={20}/>
-          <input className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Search product name, category or SKU..."/>
+          <input 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" 
+            placeholder="Search product name, category or SKU..."
+          />
         </div>
         <div className="flex items-center gap-2">
           <button className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-bold text-sm flex items-center gap-2">
@@ -136,7 +142,12 @@ export default function Products() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {products.map(p => (
+              {products
+                .filter(p => 
+                  p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  p.Category?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(p => (
                 <tr key={p.id} className="hover:bg-slate-50 group transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
@@ -306,7 +317,7 @@ export default function Products() {
                     <div>
                       <label className="block text-sm font-bold text-slate-700 mb-2">Category</label>
                       <select value={formData.categoryId} onChange={e=>setFormData({...formData, categoryId:e.target.value})} className="w-full border-2 border-slate-100 p-3 rounded-xl outline-none font-medium bg-white">
-                        {categories.map((c, i) => <option key={i} value={i+1}>{c}</option>)}
+                        {categories.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
                     </div>
                     <div>

@@ -4,10 +4,11 @@ import { Tags, Plus, Trash2, Edit2, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Categories() {
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [newCat, setNewCat] = useState('');
-  const [isAdding, setIsAdding] = useState(false);
+  const [editingCat, setEditingCat] = useState<any>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -27,16 +28,37 @@ export default function Categories() {
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCat.trim()) return;
-    setIsAdding(true);
+    setIsProcessing(true);
     try {
-      const response = await axios.post('/api/categories', { name: newCat });
-      setCategories([...categories, response.data.name]);
+      if (editingCat) {
+        await axios.put(`/api/categories/${editingCat.id}`, { name: newCat });
+      } else {
+        await axios.post('/api/categories', { name: newCat });
+      }
+      fetchCategories();
       setNewCat('');
+      setEditingCat(null);
     } catch (err) {
-      console.error('Add failed');
+      console.error('Processing failed');
     } finally {
-      setIsAdding(false);
+      setIsProcessing(false);
     }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (confirm('Are you sure you want to delete this category?')) {
+      try {
+        await axios.delete(`/api/categories/${id}`);
+        fetchCategories();
+      } catch (err) {
+        console.error('Delete failed');
+      }
+    }
+  };
+
+  const startEdit = (cat: any) => {
+    setEditingCat(cat);
+    setNewCat(cat.name);
   };
 
   return (
@@ -56,7 +78,7 @@ export default function Categories() {
         {/* Left: Add Card */}
         <div className="md:col-span-1">
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-8">
-            <h3 className="font-bold text-slate-900 mb-4">Add New Category</h3>
+            <h3 className="font-bold text-slate-900 mb-4">{editingCat ? 'Edit Category' : 'Add New Category'}</h3>
             <form onSubmit={handleAddCategory} className="space-y-4">
               <div>
                 <input
@@ -64,17 +86,28 @@ export default function Categories() {
                   value={newCat}
                   onChange={(e) => setNewCat(e.target.value)}
                   placeholder="e.g. Footwear"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm font-medium"
                 />
               </div>
-              <button
-                type="submit"
-                disabled={isAdding || !newCat.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              >
-                {isAdding ? <Loader2 className="animate-spin" size={18} /> : <Plus size={18} />}
-                Add Category
-              </button>
+              <div className="flex gap-2">
+                {editingCat && (
+                  <button
+                    type="button"
+                    onClick={() => { setEditingCat(null); setNewCat(''); }}
+                    className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-lg transition-all text-sm"
+                  >
+                    Cancel
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  disabled={isProcessing || !newCat.trim()}
+                  className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-md shadow-indigo-100"
+                >
+                  {isProcessing ? <Loader2 className="animate-spin" size={18} /> : (editingCat ? <Edit2 size={18} /> : <Plus size={18} />)}
+                  {editingCat ? 'Update' : 'Add Category'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -104,23 +137,29 @@ export default function Categories() {
                         </td>
                       </tr>
                     ) : (
-                      categories.map((cat, idx) => (
+                      categories.map((cat: any) => (
                         <motion.tr 
-                          key={cat}
+                          key={cat.id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           className="hover:bg-slate-50 transition-colors group"
                         >
                           <td className="px-6 py-4">
-                            <span className="text-sm font-semibold text-slate-900">{cat}</span>
+                            <span className="text-sm font-semibold text-slate-900">{cat.name}</span>
                           </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                              <button 
+                                onClick={() => startEdit(cat)}
+                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                              >
                                 <Edit2 size={16} />
                               </button>
-                              <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                              <button 
+                                onClick={() => handleDelete(cat.id)}
+                                className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                              >
                                 <Trash2 size={16} />
                               </button>
                             </div>

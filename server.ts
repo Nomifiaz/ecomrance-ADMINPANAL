@@ -31,7 +31,7 @@ const upload = multer({ storage });
 app.use(express.json());
 app.use('/uploads', express.static('public/uploads'));
 
-// Mock Data
+// Mock Data - Initialized with provided samples
 let categories = [
   { id: 1, name: "Clothes", isDeleted: false, createdAt: "2025-09-17T09:10:16.000Z", updatedAt: "2025-09-17T09:10:16.000Z" },
   { id: 2, name: "Bed Sheets", isDeleted: false, createdAt: "2025-09-17T09:24:12.000Z", updatedAt: "2025-09-17T09:24:12.000Z" }
@@ -58,19 +58,38 @@ let products: any[] = [
     rating_count: 0
   },
   {
-    id: 5,
-    name: "tesjjj",
-    description: "test",
-    price: 24000,
-    stock: 22,
-    images: ["/uploads/images-1777651786226-537739729.png"],
+    id: 2,
+    name: "Maria.B Pakistani Luxury Embroidered Lawn Suit",
+    description: "Fabric:Printed Lawn .Work: Embroidery and Printed .Includes: Kameez, Trouser and Dupatta.Accessories: Tassels and hanging pearls will be provided same as the model picture.",
+    price: 10000,
+    stock: 34,
+    images: ["/uploads/1758100854974-WhatsApp Image 2025-09-17 at 2.20.24 PM.jpeg"],
     categoryId: 1,
     discountType: "percentage",
-    discountValue: 14,
-    finalPrice: 20640,
-    createdAt: "2026-05-01T16:09:46.000Z",
-    updatedAt: "2026-05-01T18:24:29.000Z",
+    discountValue: 50,
+    finalPrice: 5000,
+    createdAt: "2025-09-17T09:20:55.000Z",
+    updatedAt: "2025-09-17T09:20:55.000Z",
     Category: { id: 1, name: "Clothes", isDeleted: false },
+    averageRating: "0.0",
+    totalRatings: 0,
+    rating: 0,
+    rating_count: 0
+  },
+  {
+    id: 3,
+    name: "SLIME Comforter Set- 7 Pcs",
+    description: "1 x Bed Sheet 90 x 95 Inches1 x Comforter Filled (150 GSM) 90 x 95 Inches4 x Pillow Covers Printed 18 x 28 Inches1 x Cushion Cover Printed 16 x 16 Inches",
+    price: 7000,
+    stock: 34,
+    images: ["/uploads/1758101066009-WhatsApp Image 2025-09-17 at 2.20.24 PM.jpeg"],
+    categoryId: 2,
+    discountType: "percentage",
+    discountValue: 30,
+    finalPrice: 4900,
+    createdAt: "2025-09-17T09:24:26.000Z",
+    updatedAt: "2025-09-17T09:27:04.000Z",
+    Category: { id: 2, name: "Bed Sheets", isDeleted: false },
     averageRating: "0.0",
     totalRatings: 0,
     rating: 0,
@@ -136,7 +155,7 @@ app.post('/api/auth/login', (req, res) => {
 
 // Categories API
 app.get('/api/categories', (req, res) => {
-  res.json(categories.filter(c => !c.isDeleted).map(c => c.name));
+  res.json(categories.filter(c => !c.isDeleted));
 });
 
 app.post('/api/categories', (req, res) => {
@@ -150,6 +169,28 @@ app.post('/api/categories', (req, res) => {
   };
   categories.push(newCat);
   res.json(newCat);
+});
+
+app.put('/api/categories/:id', (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const cat = categories.find(c => c.id === parseInt(id));
+  if (cat) {
+    cat.name = name;
+    cat.updatedAt = new Date().toISOString();
+    return res.json(cat);
+  }
+  res.status(404).json({ error: 'Category not found' });
+});
+
+app.delete('/api/categories/:id', (req, res) => {
+  const { id } = req.params;
+  const cat = categories.find(c => c.id === parseInt(id));
+  if (cat) {
+    cat.isDeleted = true;
+    return res.json({ success: true });
+  }
+  res.status(404).json({ error: 'Category not found' });
 });
 
 // Products API
