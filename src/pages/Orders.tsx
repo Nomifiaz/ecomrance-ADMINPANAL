@@ -196,16 +196,16 @@ export default function Orders() {
                             </div>
                             <div>
                               <p className="text-sm font-bold text-slate-900">{item.productName}</p>
-                              <p className="text-xs text-slate-500">Qty: {item.quantity} x ${parseFloat(item.price).toFixed(2)}</p>
+                              <p className="text-xs text-slate-500">Qty: {item.quantity} x Rs. {Math.round(parseFloat(item.price)).toLocaleString()}</p>
                             </div>
                           </div>
-                          <p className="text-sm font-bold text-slate-900">${parseFloat(item.total).toFixed(2)}</p>
+                          <p className="text-sm font-bold text-slate-900">Rs. {Math.round(parseFloat(item.total)).toLocaleString()}</p>
                         </div>
                       ))}
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                        <span className="text-sm font-bold text-slate-900">Total Amount</span>
-                       <span className="text-xl font-black text-indigo-600">${parseFloat(order.totalAmount).toFixed(2)}</span>
+                       <span className="text-xl font-black text-indigo-600">Rs. {Math.round(parseFloat(order.totalAmount)).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

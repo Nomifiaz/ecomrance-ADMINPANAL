@@ -44,7 +44,7 @@ let products: any[] = [
     description: "Fabric:Printed Lawn .Work: Embroidery and Printed .Includes: Kameez, Trouser and Dupatta.",
     price: 5679,
     stock: 34,
-    images: ["https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&q=80&w=400"],
+    images: ["/uploads/images-1777651786226-537739729.png"],
     categoryId: 1,
     discountType: "percentage",
     discountValue: 10,
@@ -74,7 +74,7 @@ let orders: any[] = [
         quantity: 1,
         price: "20640.00",
         total: "20640.00",
-        Product: { images: ["https://images.unsplash.com/photo-1523381235212-17cd260389e4?auto=format&fit=crop&q=80&w=400"] }
+        Product: { images: ["/uploads/images-1777651786226-537739729.png"] }
       }
     ]
   }

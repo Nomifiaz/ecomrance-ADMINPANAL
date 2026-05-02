@@ -120,7 +120,7 @@ export default function Reports() {
                   <div>
                     <p className="text-xs text-slate-500 font-medium mb-1">Total Revenue</p>
                     <div className="flex items-end gap-2">
-                      <h2 className="text-3xl font-black text-slate-900">${report?.summary?.totalRevenue}</h2>
+                      <h2 className="text-3xl font-black text-slate-900">Rs. {Math.round(parseFloat(report?.summary?.totalRevenue || '0')).toLocaleString()}</h2>
                       <span className="text-emerald-500 text-xs font-bold mb-1 flex items-center">
                         <ArrowUpRight size={14} /> 12%
                       </span>
@@ -132,7 +132,7 @@ export default function Reports() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 font-medium mb-1">Avg. Order Value</p>
-                    <h2 className="text-3xl font-black text-slate-900">${report?.summary?.averageOrderValue}</h2>
+                    <h2 className="text-3xl font-black text-slate-900">Rs. {Math.round(parseFloat(report?.summary?.averageOrderValue || '0')).toLocaleString()}</h2>
                   </div>
                 </div>
               </div>

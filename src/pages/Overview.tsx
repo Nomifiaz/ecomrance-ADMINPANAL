@@ -52,10 +52,10 @@ export default function Overview() {
   }, []);
 
   const cards = [
-    { title: 'Total Revenue', value: `$${stats?.summary?.totalRevenue || '0'}`, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50', trend: '+12.5%', isUp: true },
+    { title: 'Total Revenue', value: `Rs. ${Math.round(parseFloat(stats?.summary?.totalRevenue || '0')).toLocaleString()}`, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50', trend: '+12.5%', isUp: true },
     { title: 'Total Orders', value: stats?.summary?.totalOrders || '0', icon: ShoppingCart, color: 'text-blue-600', bg: 'bg-blue-50', trend: '+8.2%', isUp: true },
     { title: 'New Customers', value: '156', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50', trend: '-2.4%', isUp: false },
-    { title: 'Avg. Order', value: `$${stats?.summary?.averageOrderValue || '0'}`, icon: TrendingUp, color: 'text-amber-600', bg: 'bg-amber-50', trend: '+5.1%', isUp: true },
+    { title: 'Avg. Order', value: `Rs. ${Math.round(parseFloat(stats?.summary?.averageOrderValue || '0')).toLocaleString()}`, icon: TrendingUp, color: 'text-amber-600', bg: 'bg-amber-50', trend: '+5.1%', isUp: true },
   ];
 
   return (
